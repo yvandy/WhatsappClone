@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Login.css';
 import logo from './whatsapp_img.png';
 import { authProvider } from "./firebase";
@@ -10,7 +10,7 @@ import { useStateValue } from './StateProvider';
 function Login() {
 
     const [{ }, dispatch] = useStateValue();
-    
+
     const auth = getAuth();
     const signIn = () => {
         // console.log(auth, authProvider);
@@ -25,7 +25,7 @@ function Login() {
             }).catch((error) =>
                 console.log(error.message)
             )
-    }
+    }   
 
     return (
         <div className='login'>

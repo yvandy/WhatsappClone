@@ -2,9 +2,8 @@ import { Avatar } from '@material-ui/core';
 import React, { useEffect, useState } from 'react'
 import './SidebarChat.css';
 import db from "./firebase";
-import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { collection, doc, getDoc, getDocs, orderBy, onSnapshot, query, Timestamp, setDoc, addDoc, listCollections } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, addDoc, } from "firebase/firestore";
 
 
 function SidebarChat({ id, name, addNewChat }) {
@@ -25,14 +24,12 @@ function SidebarChat({ id, name, addNewChat }) {
 
     useEffect(() => {
         setSeed(Math.floor(Math.random() * 5000));
-        console.log(id)
+        // console.log(id)
         if (id) {
             retriveLastMessage();
-            console.log(chat)
+            // console.log(chat)
         }
-    }, [id])
-
-    
+    }, [id])    
 
     const createChat = async () => {
         const roomName = prompt("Please enter name for chat ");

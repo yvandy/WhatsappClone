@@ -16,10 +16,11 @@ function Chat() {
   const [roomName, setRoomName] = useState('');
   const [chat, setChat] = useState([]);
   const [{ user }, dispatch] = useStateValue();
-  let arr = [];
+  const [search, setSearch] = useState('');
+  const [refreshInterval, setrefreshInterval] = useState();
 
   const retrieveChat = async () => {
-    setSeed(Math.floor(Math.random() * 5000));
+    
     const decRef = doc(db, 'rooms', roomId);
     const docSnap = await getDoc(decRef);
     if (docSnap.exists()) {
@@ -27,48 +28,71 @@ function Chat() {
     } else {
       console.log("No data")
     }
-   
-    const querySnap = query(collection(db, "rooms",roomId,'messages'),orderBy("timestamp","asc"));
+    const querySnap = query(collection(db, "rooms", roomId, 'messages'), orderBy("timestamp", "asc"));
     const querySnapshot = await getDocs(querySnap);
-
+    let arr = [];
     querySnapshot.forEach((doc) => {
       const data = doc.data();
       arr.push(data);
-      setChat(arr);      
     });
-
+    setChat(arr);
   }
 
+  // useEffect(() => {
+  //   setSeed(Math.floor(Math.random() * 5000));
+  //   if (refreshInterval) {
+  //     clearInterval(refreshInterval);
+  //     setrefreshInterval(null)
+  //   }
+  //   if (roomId) {
+  //     const refreshInt = setInterval(retrieveChat, 10000);
+  //     setrefreshInterval(refreshInt)
+  //   }
+  // }, []);
   useEffect(() => {
-    if (roomId) {
-      retrieveChat();
+    if (roomId) {      
+      retrieveChat()
     }
-  }, [roomId])
+  }, [roomId, search]);
 
   const sendMessage = async (e) => {
-    e.preventDefault();    
+    e.preventDefault();
     const docData = {
       messages: input,
-      name: user.displayName,
+      name: user?.displayName,
       timestamp: Timestamp.fromDate(new Date())
     }
     await addDoc(collection(db, "rooms", roomId, "messages"), docData);
     setInput("");
+    retrieveChat();
   }
+
+  const searchChatHandler = (event) => {
+
+    let searchRoom = prompt("Please enter room name ");
+    if (searchRoom) {
+      setSearch(searchRoom);
+    }
+
+  }
+
 
   return (
     <div className='chat'>
-
       <div className='chat__header'>
         <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`} />
-
         <div className='chat__headerInfo'>
-          <h3> {roomName} </h3>
-          <p>Last seen at ...{ new Date(chat[chat.length - 1]?.timestamp?.toDate()).toUTCString()} </p>
+          {
+            roomName && (
+              <React.Fragment>
+                <h3> {roomName} </h3>
+                <p>Last seen at ...{new Date(chat[chat.length - 1]?.timestamp?.toDate()).toUTCString()} </p>
+              </React.Fragment>
+            )
+          }
         </div>
-
         <div className='chat__headerRight'>
-          <IconButton>
+          <IconButton >
             <SearchOutlined />
           </IconButton>
           <IconButton>
@@ -78,13 +102,12 @@ function Chat() {
             <MoreVertIcon />
           </IconButton>
         </div>
-
       </div>
 
       <div className='chat__body'>
         {
           chat.map((item, index) => (
-            <p key={index} className={`chat__message ${item.name === user.displayName && 'chat__receiver'}`}>
+            <p key={index} className={`chat__message ${item.name === user?.displayName && 'chat__receiver'}`}>
               <span className='chat__name'>{item.name}</span>
               {item.messages}
               <span className='chat__timeStamp'>{
@@ -93,8 +116,6 @@ function Chat() {
             </p>
           ))
         }
-
-
       </div>
 
       <div className='chat__footer'>
@@ -104,10 +125,7 @@ function Chat() {
           <button type='submit' onClick={sendMessage}> Send a message</button>
         </form>
         <MicOutlined />
-
       </div>
-
-
     </div>
   )
 }
