@@ -4,7 +4,7 @@ import { AttachFile, InsertEmoticon, Message, MicOutlined, SearchOutlined } from
 import React, { useEffect, useState } from 'react';
 import "./Chat.css";
 import { useParams } from 'react-router-dom';
-import { collection, doc, getDoc, getDocs, orderBy, onSnapshot, query, Timestamp, setDoc, addDoc, listCollections } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, orderBy, query, Timestamp,  addDoc } from "firebase/firestore";
 import db from "./firebase";
 import { useStateValue } from './StateProvider';
 
