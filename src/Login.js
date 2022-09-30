@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import './Login.css';
 import logo from './whatsapp_img.png';
 import { authProvider } from "./firebase";
-import { signInWithPopup, GoogleAuthProvider, getAuth } from 'firebase/auth';
+import { signInWithPopup, getAuth } from 'firebase/auth';
 import { actionTypes } from './reducer';
 import { useStateValue } from './StateProvider';
 

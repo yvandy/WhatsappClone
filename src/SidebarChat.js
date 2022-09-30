@@ -6,13 +6,13 @@ import { Link } from 'react-router-dom';
 import { collection, getDocs, orderBy, query, addDoc, } from "firebase/firestore";
 
 
-function SidebarChat({ id, name, addNewChat }) {
-    
+function SidebarChat({ id, name, addNewChat, selected, changeColor }) {
+
     const [seed, setSeed] = useState('');
     let arr = [];
     const [chat, setChat] = useState([]);
 
-    const retriveLastMessage = async () =>{
+    const retriveLastMessage = async () => {
         const querySnap = query(collection(db, "rooms", id, 'messages'), orderBy("timestamp", "desc"));
         const querySnapshot = await getDocs(querySnap);
         querySnapshot.forEach((doc) => {
@@ -29,7 +29,7 @@ function SidebarChat({ id, name, addNewChat }) {
             retriveLastMessage();
             // console.log(chat)
         }
-    }, [id])    
+    }, [id])
 
     const createChat = async () => {
         const roomName = prompt("Please enter name for chat ");
@@ -41,9 +41,13 @@ function SidebarChat({ id, name, addNewChat }) {
         }
     }
 
+    const clickHandler = () => {
+        selected(id)        
+    }
+
     return !addNewChat ? (
-        <Link to={`/rooms/${id}`}>
-            <div className='sidebarChat'>
+        <Link to={`/rooms/${id}`} onClick={clickHandler}>
+            <div className={`sidebarChat ${changeColor ? 'selected' : null}`}>
                 <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`} />
                 <div className='sidebarChat__info'>
                     <h2> {name} </h2>

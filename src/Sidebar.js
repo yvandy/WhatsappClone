@@ -21,8 +21,9 @@ function Sidebar() {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const auth = getAuth();
     const [searchChat, setSearchChat] = useState('');
+    const [selectedId, setSelectedId] = useState();
 
-    
+
     const handleLogout = () => {
         auth.signOut().then(() => {
             dispatch({
@@ -56,9 +57,14 @@ function Sidebar() {
     useEffect(() => {
         fun()
         return () => {
-            fun();
+            setRooms([])
         }
     }, [])
+
+    const checkSelected = (id) => {
+        setSelectedId(id);
+    }
+
     return (
         <div className='sidebar'>
             <div className='sidebar__header'>
@@ -70,7 +76,6 @@ function Sidebar() {
                     <IconButton>
                         <ChatIcon />
                     </IconButton>
-
                     <IconButton onClick={handleClick}>
                         <MoreVertIcon />
                     </IconButton>
@@ -107,7 +112,7 @@ function Sidebar() {
                             <SidebarChat key={room.id} id={room.id} name={room.name} />
                         )) :
                         rooms.map(room => (
-                            <SidebarChat key={room.id} id={room.id} name={room.name} />
+                            <SidebarChat key={room.id} id={room.id} name={room.name} selected={checkSelected} changeColor={selectedId === room.id} />
                         ))
                 }
             </div>

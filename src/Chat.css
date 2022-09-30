@@ -53,7 +53,7 @@
 }
 .chat__name{
     position: absolute;
-    top: -15px;
+    top: 0px;
     font-weight: 800;
     font-size: xx-small;
 }

@@ -38,10 +38,8 @@ function App() {
         (
           <div className='app__body'>
             <Router>
-
               <Sidebar />
               <Switch>
-
                 <Route exact path='/rooms/:roomId'>
                   <Chat  />
                 </Route>

@@ -38,17 +38,6 @@ function Chat() {
     setChat(arr);
   }
 
-  // useEffect(() => {
-  //   setSeed(Math.floor(Math.random() * 5000));
-  //   if (refreshInterval) {
-  //     clearInterval(refreshInterval);
-  //     setrefreshInterval(null)
-  //   }
-  //   if (roomId) {
-  //     const refreshInt = setInterval(retrieveChat, 10000);
-  //     setrefreshInterval(refreshInt)
-  //   }
-  // }, []);
   useEffect(() => {
     if (roomId) {      
       retrieveChat()
